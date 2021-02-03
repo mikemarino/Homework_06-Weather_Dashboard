@@ -16,6 +16,8 @@
     <!-- Fonts-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" />
+        <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+    
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -30,23 +32,27 @@
         <div class="search">
             <div class="row">
                 <div class="col-sm-3">
-                 <form id="sForm"></form>
+                 <form id="search-form">
                     <div class="input-group mb-3">
                        
-                        <input type="text" class="form-control" id="searchLocation" autofocus="true" placeholder="Search City or Zip Code">
+                        <input type="text" class="form-control" id="search-location" autofocus="true" placeholder="Search City or Zip Code" />
                         <button class="btn btn-outline-secondary" type="submit" id="search-button">🔍</button>
                                     
-                </div>
+                    </div>
                  </form>
-            </div>
+                </div>
             
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-8 col-sm-6">
-                        <h3>Date 1/29/2021</h3><br />
-                        <h4>Picture</h4><br />
-                        <h4>Temperature</h4><br />
-                        <h4>Humidity</h4><br />
+                        <h3><span id="hero-date"></span></h3>
+                        <h3><span id="hero-location"></span></h3><br />
+                        
+                        <!-- <h4><span id="hero-icon"></span></h4><br /> -->
+                        <h4><span id="hero-temp"></span></h4><br />
+                        <h4><span id="hero-humid"></span></h4><br />
+                        <h4><span id="hero-wind"></span></h4><br />
+                        <h4><span id="hero-uvi"></span></h4><br />
 
                     </div>
                     <div class="col-4 col-sm-6">
@@ -56,17 +62,17 @@
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="card-group">
-                            <div class="card">
+                            <!-- <div class="card">
                                 <img src="assets/placeholder-image.png" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
+                                    <h5 class="card-title"><span class=></span>Card title</h5>
                                     <p class="card-text">This is a wider card with supporting text below as a
                                         natural
                                         lead-in to additional content. This content is a little bit longer.</p>
                                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small>
                                     </p>
                                 </div>
-                            </div>
+                            </div> 
                             <div class="card">
                                 <img src="assets/placeholder-image.png" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -112,13 +118,14 @@
                                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small>
                                     </p>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
                 </div>
             </div>
-        
+            </div>
+        </div>
 
 
 
@@ -146,9 +153,13 @@
     </div> <!-- end plate -->
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
 <script src="assets/js/script.js"></script>
 
 </html>

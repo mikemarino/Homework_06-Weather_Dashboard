@@ -33,9 +33,37 @@
  }
 
 
+
+ 
  .fit-image {
      width: 100%;
-     object-fit: cover;
+     object-fit:scale-down;
      /* height: 300px; */
      /* only if you want fixed height */
+ }
+
+ .card-header {
+     background-image: linear-gradient(white, silver, white);
+
+ }
+
+ .card-body {
+     background-image: linear-gradient(#33d1e2, #0ca6b894, #05474e);
+     color: white;
+ }
+
+ .temp {
+    font-family: 'Abel',
+    sans-serif;
+    font-size: 68px;
+    text-shadow: 3px 3px black;
+    white-space: nowrap;
+
+
+ }
+ 
+ .tempLow {
+     font-family: 'Abel',
+     sans-serif;
+     font-size: 48px;
  }
