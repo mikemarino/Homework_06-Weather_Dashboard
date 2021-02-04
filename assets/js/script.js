@@ -8,32 +8,104 @@ var iconHero = document.querySelector('#hero-icon');
 var tempHero = document.querySelector('#hero-temp');
 var humidHero = document.querySelector('#hero-humid');
 var uviHero = document.querySelector('#hero-uvi');
-var windHero = document.querySelector('#hero-wind')
+var windHero = document.querySelector('#hero-wind');
+// var cityRecord = document.querySelectorAll('.city-record')
 
 // OpenWeather API Key = 46cf839acea41a07f1ac5b85a8f5be30
 
+
+function renderCities() {
+
+
+    // Function to insert HTML element as a sibling, rather than append child
+    function insertAfter(referenceNode, newNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+     const cityHistory = document.getElementById("city-history")
+     cityHistory.innerHTML = "";
+
+    const oldCity1 = JSON.parse(localStorage.getItem('city')) || [];
+
+    // for (let i = 0; i < oldCity1.length; i++) {
+    //     console.log("############" + oldCity1.city);
+    //     var cityHistory = document.createElement('div');
+    //     toString(oldCity1[i]);
+    //     cityHistory.classList = "hey";
+    //     cityHistory.innerText = oldCity1[i];
+
+       
+    // }
+
+                oldCity1.forEach(function (city, index) {
+                var cityHistoryName = document.createElement('div');
+                cityHistoryName.classList.add("city-record")
+                cityHistoryName.textContent = city.city;
+                cityHistory.appendChild(cityHistoryName);
+                
+                })
+
+                $('.city-record').on("click", function (event) {
+                    //save textContent from text area to localstorage here
+                    event.preventDefault();
+
+                    oldCityRecord = $(this).text();
+                    console.log(oldCityRecord);
+
+                    getCurrentData(oldCityRecord);
+                    getForecastData(oldCityRecord);
+
+
+                })
+}
+
+
 var formSubmitHandler = function (event) {
 event.preventDefault();
-
-var searchLocation = locationInput.value.trim();
-
-
-
+const searchLocation = locationInput.value.trim();
 // console.log(searchLocation);
+// cardGroup.innerHTML = "";
 
 if (searchLocation) {
 
-    getCurrentData(searchLocation)
+    storeResult(searchLocation);
+    getCurrentData(searchLocation);
     getForecastData(searchLocation);
-    
+
+ renderCities();
 
     // repoContainerEl.textContent = '';
     // nameInputEl.value = '';
 } else {
-    alert('Please enter a location.');
+    alert('Location not found.  Please enter a city name.');
+}
+};
+
+ renderCities();
+
+function storeResult(userCity) {
+
+    const oldCity = JSON.parse(localStorage.getItem('city')) || [];
+    const cityToUse = userCity;
+    const existingCity = oldCity.find(({
+        city
+    }) => city === cityToUse);
+    if (existingCity) {
+        Object.assign(existingCity, {
+            'city': userCity,
+        })
+    } else {
+        const newCity = {
+            'city': userCity,
+
+        };
+        oldCity.push(newCity);
+    }
+
+    localStorage.setItem('city', JSON.stringify(oldCity));
+
 }
 
-};
 
 
 var getCurrentData = function (location) {
@@ -56,7 +128,7 @@ var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + location + "
           alert('Unable to connect to OpenWeatherAPI');
       });
 
-      
+
 }
 
 var getAddData = function (lat, long) {
@@ -93,7 +165,7 @@ var getForecastData = function (location) {
           if (response.ok) {
               console.table(response);
               response.json().then(function (data) {
-                    console.table(data);
+                    console.table("okay so far");
                     //console.log(data.main.temp)
                   displayForecast(data, location);
               });
@@ -131,22 +203,22 @@ var displayCurrent = function (weatherData, place) {
 
        var dt = moment.unix(dateTime).format('dddd, MMMM DD, YYYY');
        dateHero.innerText = dt;
-        
+
 
         var weatherIcon = document.createElement('img');
         // var iconUrl = "http://"
         weatherIcon.classList = ""
         weatherIcon.setAttribute('src', 'http://openweathermap.org/img/w/' + iconCode + ".png");
-        locationHero.insertAdjacentElement('afterend', weatherIcon);
+        locationHero.appendChild(weatherIcon);
         // iconHero.insertAdjacentElement('afterend', weatherIcon);
-    // for (var i = 0; i < weatherData.length; i++) { 
+    // for (var i = 0; i < weatherData.length; i++) {
         windHero.innerText="Wind Speep: " + windSpeed + " MPH"
        tempHero.innerText="Temperature: " + tempF;
        humidHero.innerText="Humidity: " + humidity;
-      
-        getAddData(latAPI, lonAPI);
-        
 
+        getAddData(latAPI, lonAPI);
+
+   
 
     // }
 
@@ -156,23 +228,40 @@ var displayCurrent = function (weatherData, place) {
 
 var displayAddData =function (weatherAdd) {
 
-    
+
     uvIndex = weatherAdd.current.uvi;
     console.log(uvIndex)
     uviHero.innerText = "UV Index: " + uvIndex;
+    if(uvIndex<=3){
+        uviHero.classList = "uviLow";
+    }
+    if(uvIndex>3 && uvIndex<=5){
+         uviHero.classList = "uviMod";
+    }
+     if (uvIndex>5 && uvIndex <= 7) {
+         uviHero.classList = "uviHigh";
+     }
+     if (uvIndex > 7) {
+             uviHero.classList = "uviVeryHigh";
+     }
 
 }
 
 var displayForecast = function (weatherData, place) {
 
-   
-    // ########## ERROR RETURING LENGTH OF API DATA PULL ###########    
+
+    // ########## ERROR RETURING LENGTH OF API DATA PULL ###########
     // if (weatherData.length === 0) {
     //     locationHero.textContent = 'No repositories found.';
     //     return;
     // }
 
+
     console.log(place);
+
+       const cardGroup = document.getElementById("card-group")
+       cardGroup.innerHTML = "";
+
 
     cityName=weatherData.city.name;
 
@@ -183,17 +272,21 @@ var displayForecast = function (weatherData, place) {
 
     humidity = weatherData.list[i].main.humidity;
     windSpeed = weatherData.list[i].wind.speed;
-    
+
     dateTime=weatherData.list[i].dt_txt;
     iconCode=weatherData.list[i].weather[0].icon;
     descriptionMain = weatherData.list[i].weather[0].main;
     description = weatherData.list[i].weather[0].description;
 
-    var dt = moment(dateTime).format('ddd');
+    var dayT = moment(dateTime).format('ddd');
+    var fullDay = moment(dateTime).format('M/DD/YYYY');
+    // 'M/DD/YYYY'
 
-    var dtStr = String(dt)
+    var dtStr = String(dayT)
     var dtShow= dtStr.toUpperCase();
-    
+
+    var fullDayStr = String(fullDay);
+
     console.log(cityName);
     console.log(dtShow);
     console.log(tempF);
@@ -207,16 +300,20 @@ var displayForecast = function (weatherData, place) {
     forecastDate.classList = "card-header flex-row align-center";
     forecastDate.innerText = dtShow;
 
+     var forecastFullDate = document.createElement('h6');
+     forecastFullDate.classList = "flex-row align-center";
+     forecastFullDate.innerText = fullDayStr;
+
     var weatherIcon=document.createElement('img');
     // var iconUrl = "http://"
     weatherIcon.classList = "fit-image card-img-top"
     weatherIcon.setAttribute('src', 'http://openweathermap.org/img/w/' + iconCode + ".png");
-    
+
      var cardBody = document.createElement('div');
      cardBody.classList = "card-body";
 
-    var cardDescription = document.createElement('h5');
-    cardDescription.classList = "";
+    var cardDescription = document.createElement('h4');
+    cardDescription.classList = "descript";
     cardDescription.innerText = descriptionMain + ", " + description;
 
      var cardTemp = document.createElement('h5');
@@ -226,76 +323,61 @@ var displayForecast = function (weatherData, place) {
       var cardTempLow = document.createElement('h6');
       cardTempLow.classList = "card-title tempLow";
       cardTempLow.innerText = Math.round(tempLow) + '\xB0 F';
-         
+
+       var humidityShow = document.createElement('h6');
+       humidityShow.classList = "flex-row align-center";
+       humidityShow.innerText = "Humidity: " + humidity;
 
     // Function to insert HTML element as a sibling, rather than append child
    function insertAfter(referenceNode, newNode) {
        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
    }
 
+
+   
+
     weatherCardContainer.appendChild(weatherCard);
     weatherCard.appendChild(forecastDate);
+    forecastDate.appendChild(forecastFullDate);
     insertAfter(forecastDate, cardBody)
     cardBody.appendChild(weatherIcon);
     cardBody.appendChild(cardDescription);
-    cardBody.appendChild(cardTemp)
-    cardBody.appendChild(cardTempLow)
+    cardBody.appendChild(cardTemp);
+    cardBody.appendChild(cardTempLow);
+    cardBody.appendChild(humidityShow);
     // insertAfter(weatherIcon, cardTemp);
-
-
-
     }
 
-    // // locationHero.textContent = place;
-    
-    // for (var i = 0; i < weatherData.length; i++) {
-    //      var temp = weatherData[i].main.temp;
-    //      tempHero.textContent = temp;
 
-    //      console.log(weatherData[i].main.temp)
-    // };
-
-    //     var repoEl = document.createElement('a');
-    //     repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    //     repoEl.setAttribute('href', './single-repo.html?repo=' + repoName);
-
-    //     var titleEl = document.createElement('span');
-    //     titleEl.textContent = repoName;
-
-    //     repoEl.appendChild(titleEl);
-
-    //     var statusEl = document.createElement('span');
-    //     statusEl.classList = 'flex-row align-center';
-
-    //     if (weatherData[i].open_issues_count > 0) {
-    //         statusEl.innerHTML =
-    //             "<i class='fas fa-times status-icon icon-danger'></i>" + weatherData[i].open_issues_count + ' issue(s)';
-    //     } else {
-    //         statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
-    //     }
-
-    //     repoEl.appendChild(statusEl);
-
-    //     repoContainerEl.appendChild(repoEl);
-    // }
 };
 
 
+function renderOldCity() {
+
+     //save textContent from text area to localstorage here
+     event.preventDefault();
+
+     timeHour = $(this).prev().prev().text();
+     textArea = $(this).prev().val();
+
+}
+
+$('.city-record').on("click", function (event) {
+    //save textContent from text area to localstorage here
+    event.preventDefault();
+
+    oldCityRecord = $(this).text();
+    console.log(oldCityRecord);
+
+    getCurrentData(oldCityRecord);
+    getForecastData(oldCityRecord);
 
 
-
-
-
-
-
-
-
-
-
-
-
+})
 
 
 
 
 searchForm.addEventListener('submit', formSubmitHandler);
+// cityRecord.addEventListener('click', renderOldCity);
+

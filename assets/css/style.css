@@ -43,8 +43,14 @@
  }
 
  .card-header {
-     background-image: linear-gradient(white, silver, white);
+    background-image: linear-gradient(white, silver, white);
 
+ }
+
+ .city-record{
+    background-image: linear-gradient(white, silver, white);
+cursor: pointer;
+    
  }
 
  .card-body {
@@ -52,18 +58,45 @@
      color: white;
  }
 
+.descript{
+font-family: 'Abel',
+sans-serif;
+font-size: 2vw;
+}
+
  .temp {
     font-family: 'Abel',
     sans-serif;
     font-size: 68px;
-    text-shadow: 3px 3px black;
-    white-space: nowrap;
+    font-size: 4vw;
+    text-shadow: 2px 2px black;
+    white-space:nowrap;
 
 
  }
  
  .tempLow {
-     font-family: 'Abel',
-     sans-serif;
+     font-family: 'Abel', sans-serif;
      font-size: 48px;
+      font-size: 4vh;
+ }
+
+ .uviLow {
+
+    background-color: seagreen;
+
+ }
+
+ .uviMod {
+     background-color: yellow;
+
+ }
+
+ .uviHigh {
+     background-color: tomato;
+
+ }
+
+ .uviVeryHigh {
+     background-color:orangered 
  }
